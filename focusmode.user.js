@@ -21,6 +21,11 @@ style.textContent = `
     ytd-browse[page-subtype="home"] ytd-rich-grid-renderer {
         display: none !important;
         }
+    ytd-reel-item-renderer,
+ytd-reel-shelf-renderer,
+ytd-rich-shelf-renderer:has(a[href*="/shorts/"]) {
+    display: none !important;
+}
     `;
     document.head.appendChild(style);
     const toggle = document.createElement('button');
@@ -30,30 +35,44 @@ style.textContent = `
     toggle.style.right = '20px';
     toggle.style.zIndex = '9999';
     toggle.style.padding = '12px 18px';
-    toggle.style.background = '#222';
+    toggle.style.background = '#181818';
+    toggle.style.border = '1px solid #444';
+    toggle.style.fontSize = '13px';
+    toggle.style.fontWeight = '600';
+    toggle.style.transition = 'background 0.2s ease';
     toggle.style.color = 'white';
-    toggle.style.border = 'none';
     toggle.style.borderRadius = '8px';
     toggle.style.cursor = 'pointer';
     document.body.appendChild(toggle);
+    toggle.addEventListener('mouseenter' , () => {
+        toggle.style.background = '#333';
+    });
+    toggle.addEventListener('mouseleave', () => {
+        toggle.style.background = '#181818';
+    })
     let focusMode = true;
     toggle.addEventListener('click', () => {
       focusMode = !focusMode;
       style.disabled = !focusMode;
       toggle.textContent = `Focus Mode: ${focusMode ? 'ON' : 'OFF'}`;
     })
-    const observer = new MutationObserver(()=> {
-        document.querySelectorAll(
-            'ytd-video-renderer, ytd-grid-video-renderer, ytd-rich-item-renderer'
-        ).forEach(video => {
-            if(video.querySelector('a[href*="/shorts/"]')){
-                video.style.display = focusMode ? 'none' : '';
-            }
-        })
-    })
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    })
-    console.log("Focus Mode: Shorts hidde");
+    function hideShorts() {
+    document.querySelectorAll(
+        'ytd-video-renderer, ytd-grid-video-renderer, ytd-rich-item-renderer, ytd-reel-item-renderer'
+    ).forEach(video => {
+        const isShort = video.querySelector('a[href*="/shorts/"]');
+
+        video.style.display = focusMode && isShort ? 'none' : '';
+    });
+}
+
+const observer = new MutationObserver(() => {
+    hideShorts();
+});
+
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+hideShorts();
 })();
