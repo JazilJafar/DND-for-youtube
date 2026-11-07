@@ -18,9 +18,6 @@ style.textContent = `
     ytd-rich-item-renderer:has(a[href*="/shorts/"]) {
         display: none !important;
     }
-    ytd-browse[page-subtype="home"] ytd-rich-grid-renderer {
-        display: none !important;
-        }
     ytd-reel-item-renderer,
 ytd-reel-shelf-renderer,
 ytd-rich-shelf-renderer:has(a[href*="/shorts/"]) {
@@ -55,6 +52,8 @@ ytd-rich-shelf-renderer:has(a[href*="/shorts/"]) {
       focusMode = !focusMode;
       style.disabled = !focusMode;
       toggle.textContent = `Focus Mode: ${focusMode ? 'ON' : 'OFF'}`;
+toggle.style.borderColor = focusMode ? '#4caf50' : '#444';
+      hideShorts();
     })
     function hideShorts() {
     document.querySelectorAll(
