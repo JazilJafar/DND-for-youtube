@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Youtube Focus Mode",
+    "version": "1.0.0",
+    "description": "A Chrome extension that helps you stay focused by removing shorts on YouTube.",
+    "author": "Jazil Jafar",
+    "icons": {
+        "16": "./assets/logo.png",
+        "48": "./assets/logo.png",
+        "128": "./assets/logo.png"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://www.youtube.com/*"],
+            "js": ["content.js"],
+            "run_at": "document_idle"
+        }
+    ]
+}

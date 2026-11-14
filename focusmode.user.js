@@ -11,21 +11,22 @@
 //  the next code is like using css based to hide like short shelvesd and section hat have short shevles,shorts sidebar like ,grid shorts,in home fees,one like shorts items and etc
 (function () {
     'use strict';
-    const style = document.createElement('style');
+   const style = document.createElement('style');
 style.textContent = `
-        ytd-reel-shelf-renderer, 
-        ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
-        ytd-guide-entry-renderer:has(a[href="/feed/shorts"]),
-         ytd-grid-video-renderer:has(a[href*="/shorts/"]),
-    ytd-rich-item-renderer:has(a[href*="/shorts/"]) {
+    ytd-reel-shelf-renderer,
+    ytd-reel-item-renderer,
+    ytd-rich-section-renderer:has(ytd-reel-shelf-renderer),
+    ytd-rich-shelf-renderer:has(a[href*="/shorts/"]),
+    ytd-guide-entry-renderer:has(a[href="/feed/shorts"]),
+    ytd-mini-guide-entry-renderer:has(a[href="/feed/shorts"]),
+    ytd-grid-video-renderer:has(a[href*="/shorts/"]),
+    ytd-rich-item-renderer:has(a[href*="/shorts/"]),
+    ytd-video-renderer:has(a[href*="/shorts/"]) {
         display: none !important;
     }
-    ytd-reel-item-renderer,
-ytd-reel-shelf-renderer,
-ytd-rich-shelf-renderer:has(a[href*="/shorts/"]) {
-    display: none !important;
-}
 `;
+document.head.appendChild(style);
+
 const homeStyle = document.createElement('style');
 
 homeStyle.textContent = `
@@ -33,7 +34,6 @@ homeStyle.textContent = `
         display: none !important;
     }
 `;
-document.head.appendChild(style);
 document.head.appendChild(homeStyle);
     // i am jazil not ai so next we are apppending the style to the youtube
     // next we are creating a button to toggle focus mode on or off like someone wanted it can on
@@ -81,7 +81,7 @@ document.head.appendChild(homeStyle);
         toggle.style.background = '#181818';
     })
     let focusmode = true;
-    let hidehome = false;
+let hidehome = false;
     // next like when it clicked that on or off like ut will hide or show that its function is next saying
     toggle.addEventListener('click', () => {
       focusmode = !focusmode;
@@ -95,10 +95,14 @@ toggle.style.borderColor = focusmode ? '#4caf50' : '#444';
     document.querySelectorAll(
         'ytd-video-renderer, ytd-grid-video-renderer, ytd-rich-item-renderer, ytd-reel-item-renderer'
     ).forEach(video => {
-        // next is finding like it have shorts url this is our helping part
-        const isShort = video.querySelector('a[href*="/shorts/"]');
-
-        video.style.display = focusmode && isShort ? 'none' : '';
+        const isShort = video.querySelector(
+            'a[href*="/shorts/"]'
+        );
+        if (focusmode && isShort) {
+            video.style.setProperty('display', 'none', 'important');
+        } else {
+            video.style.removeProperty('display');
+        }
     });
 }
     // it is acting like if clicked when it is hide it will make show and reverse using js funtion ? :
